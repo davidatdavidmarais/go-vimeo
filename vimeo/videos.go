@@ -290,7 +290,7 @@ func getVideo(c *Client, url string, opt ...CallOption) (*Video, *Response, erro
 	return video, resp, err
 }
 
-func getUploadVideo(c *Client, method string, uri string, reqUpload *Video) (*Video, *Response, error) { // nolint: unparam
+func getUploadVideo(c *Client, method string, uri string, reqUpload Video) (*Video, *Response, error) { // nolint: unparam
 	req, err := c.NewRequest(method, uri, reqUpload)
 	if err != nil {
 		return nil, nil, err
@@ -306,7 +306,7 @@ func getUploadVideo(c *Client, method string, uri string, reqUpload *Video) (*Vi
 	return video, resp, err
 }
 
-func uploadVideo(c *Client, method string, url string, file *os.File) (*Video, *Response, error) {
+func uploadVideo(c *Client, method string, url string, file *os.File, req Video) (*Video, *Response, error) {
 	if c.Config.Uploader == nil {
 		return nil, nil, errors.New("uploader can't be nil if you need upload video")
 	}
@@ -320,15 +320,12 @@ func uploadVideo(c *Client, method string, url string, file *os.File) (*Video, *
 		return nil, nil, errors.New("the video file can't be a directory")
 	}
 
-	reqUpload := &Video{
-		Name: file.Name(),
-		Upload: &Upload{
-			Approach: "tus",
-			Size:     stat.Size(),
-		},
+	req.Upload = &Upload{
+		Approach: "tus",
+		Size:     stat.Size(),
 	}
 
-	video, _, err := getUploadVideo(c, method, url, reqUpload)
+	video, _, err := getUploadVideo(c, method, url, req)
 	if err != nil {
 		return nil, nil, err
 	}
