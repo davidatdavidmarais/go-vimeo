@@ -246,13 +246,6 @@ func (v Video) GetID() int {
 	return ID
 }
 
-// UploadVideoRequest specifies the optional parameters to the
-// uploadVideo method.
-type UploadVideoRequest struct {
-	Name   string  `json:"name"`
-	Upload *Upload `json:"upload,omitempty"`
-}
-
 func listVideo(c *Client, url string, opt ...CallOption) ([]*Video, *Response, error) {
 	u, err := addOptions(url, opt...)
 	if err != nil {
@@ -297,7 +290,7 @@ func getVideo(c *Client, url string, opt ...CallOption) (*Video, *Response, erro
 	return video, resp, err
 }
 
-func getUploadVideo(c *Client, method string, uri string, reqUpload *UploadVideoRequest) (*Video, *Response, error) { // nolint: unparam
+func getUploadVideo(c *Client, method string, uri string, reqUpload *Video) (*Video, *Response, error) { // nolint: unparam
 	req, err := c.NewRequest(method, uri, reqUpload)
 	if err != nil {
 		return nil, nil, err
@@ -327,7 +320,7 @@ func uploadVideo(c *Client, method string, url string, file *os.File) (*Video, *
 		return nil, nil, errors.New("the video file can't be a directory")
 	}
 
-	reqUpload := &UploadVideoRequest{
+	reqUpload := &Video{
 		Name: file.Name(),
 		Upload: &Upload{
 			Approach: "tus",
@@ -352,7 +345,7 @@ func uploadVideo(c *Client, method string, url string, file *os.File) (*Video, *
 }
 
 func uploadVideoByURL(c *Client, uri, videoURL string) (*Video, *Response, error) {
-	reqUpload := &UploadVideoRequest{
+	reqUpload := &Video{
 		Upload: &Upload{
 			Approach: "pull",
 			Link:     videoURL,

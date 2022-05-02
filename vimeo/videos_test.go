@@ -947,7 +947,7 @@ func TestVideosService_getUploadVideo(t *testing.T) {
 	setup()
 	defer teardown()
 
-	input := &UploadVideoRequest{
+	input := &Video{
 		Upload: &Upload{
 			Approach: "tus",
 			Size:     10,
@@ -955,7 +955,7 @@ func TestVideosService_getUploadVideo(t *testing.T) {
 	}
 
 	mux.HandleFunc("/me/videos", func(w http.ResponseWriter, r *http.Request) {
-		v := &UploadVideoRequest{}
+		v := &Video{}
 		err := json.NewDecoder(r.Body).Decode(v)
 		if err != nil {
 			t.Fatalf("Videos.getUploadVideo returned unexpected error: %v", err)
@@ -983,7 +983,7 @@ func TestVideosService_uploadVideoByURL(t *testing.T) {
 	defer teardown()
 
 	videoURL := "http://video.com/1.mp4"
-	input := &UploadVideoRequest{
+	input := &Video{
 		Upload: &Upload{
 			Approach: "pull",
 			Link:     videoURL,
@@ -991,7 +991,7 @@ func TestVideosService_uploadVideoByURL(t *testing.T) {
 	}
 
 	mux.HandleFunc("/me/videos", func(w http.ResponseWriter, r *http.Request) {
-		v := &UploadVideoRequest{
+		v := &Video{
 			Upload: &Upload{
 				Approach: "pull",
 				Link:     videoURL,
