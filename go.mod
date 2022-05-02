@@ -1,3 +1,3 @@
-module github.com/silentsokolov/go-vimeo
+module github.com/davidatdavidmarais/go-vimeo
 
 go 1.13
