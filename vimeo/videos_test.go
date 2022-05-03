@@ -947,7 +947,7 @@ func TestVideosService_getUploadVideo(t *testing.T) {
 	setup()
 	defer teardown()
 
-	input := &Video{
+	input := UploadVideoRequest{
 		Upload: &Upload{
 			Approach: "tus",
 			Size:     10,

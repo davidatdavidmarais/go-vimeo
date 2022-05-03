@@ -132,6 +132,13 @@ type TransCode struct {
 }
 
 // Video represents a video.
+type UploadVideoRequest struct {
+	Name      string  `json:"name,omitempty"`
+	Upload    *Upload `json:"upload,omitempty"`
+	FolderURI string  `json:"folder_uri,omitempty"`
+}
+
+// Video represents a video.
 type Video struct {
 	URI           string        `json:"uri,omitempty"`
 	Name          string        `json:"name,omitempty"`
@@ -290,7 +297,7 @@ func getVideo(c *Client, url string, opt ...CallOption) (*Video, *Response, erro
 	return video, resp, err
 }
 
-func getUploadVideo(c *Client, method string, uri string, reqUpload Video) (*Video, *Response, error) { // nolint: unparam
+func getUploadVideo(c *Client, method string, uri string, reqUpload UploadVideoRequest) (*Video, *Response, error) { // nolint: unparam
 	req, err := c.NewRequest(method, uri, reqUpload)
 	if err != nil {
 		return nil, nil, err
@@ -306,7 +313,7 @@ func getUploadVideo(c *Client, method string, uri string, reqUpload Video) (*Vid
 	return video, resp, err
 }
 
-func uploadVideo(c *Client, method string, url string, file *os.File, req Video) (*Video, *Response, error) {
+func uploadVideo(c *Client, method string, url string, file *os.File, req UploadVideoRequest) (*Video, *Response, error) {
 	if c.Config.Uploader == nil {
 		return nil, nil, errors.New("uploader can't be nil if you need upload video")
 	}
@@ -674,9 +681,9 @@ func (s *VideosService) ListRelatedVideo(vid int, opt ...CallOption) ([]*Video, 
 // ReplaceFile method adds a version to the specified video.
 //
 // Vimeo API docs: https://developer.vimeo.com/api/reference/videos#create_video_version
-func (s *VideosService) ReplaceFile(vid int, file *os.File) (*Video, *Response, error) {
+func (s *VideosService) ReplaceFile(vid int, file *os.File, req UploadVideoRequest) (*Video, *Response, error) {
 	u := fmt.Sprintf("videos/%d/versions", vid)
-	video, resp, err := uploadVideo(s.client, "POST", u, file)
+	video, resp, err := uploadVideo(s.client, "POST", u, file, req)
 
 	return video, resp, err
 }
