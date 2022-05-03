@@ -133,10 +133,14 @@ type TransCode struct {
 
 // Video represents a video.
 type UploadVideoRequest struct {
-	Name      string        `json:"name,omitempty"`
-	Upload    *Upload       `json:"upload,omitempty"`
-	FolderURI string        `json:"folder_uri,omitempty"`
-	Embed     *EmbedRequest `json:"embed,omitempty"`
+	Name                   string  `json:"name,omitempty"`
+	Upload                 *Upload `json:"upload,omitempty"`
+	FolderURI              string  `json:"folder_uri,omitempty"`
+	EmbedTitleName         string  `json:"embed.title.name,omitempty"`
+	EmbedTitleOwner        string  `json:"embed.title.owner,omitempty"`
+	EmbedTitlePortrait     string  `json:"embed.title.portrait,omitempty"`
+	EmbedButtonsShare      bool    `json:"embed.buttons.share,omitempty"`
+	EmbedButtonsWatchLater bool    `json:"embed.buttons.watchlater,omitempty"`
 }
 
 // Video represents a video.
